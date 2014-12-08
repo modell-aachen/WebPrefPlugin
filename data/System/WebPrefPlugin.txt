@@ -1,0 +1,38 @@
+%META:TOPICPARENT{name="Plugins"}%
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
+-->
+---+!! WebPref Plugin
+
+%SHORTDESCRIPTION%
+
+%TOC%
+
+Read preferences set in the web's WebPreferences topic without allowing the user to overwrite it with settings on his personal page.
+Unfortunately this also skips SitePreferences.
+
+---++ Usage
+
+=%<nop>WEBPREF{"MyPrefName" alt="some value" web="MyWeb"}%=
+
+Where the default parameter (mandatory, here =MyPrefName=) is the name of the preference and alt (optional, here =some value=, defaults to an empty string) is an alternative string you can define if the preference is not set in the web. You can define the web with the web parameter (optional, defaults to current web).
+
+For example if you want to read the web's color with a fallback to the "usual" way to read preferences use
+<verbatim>%WEBPREF{"WebColor" alt="$percentWEBBGCOLOR$percent"}%</verbatim>
+
+---++ Installation
+%$INSTALL_INSTRUCTIONS%
+
+---++ Info
+
+|  Author: | Modell Aachen GmbH |
+|  Copyright: | 2014, Modell Aachen GmbH, All Rights Reserved |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | Foswiki |
+|  Version: | %$VERSION% |
+|  Release: | %$RELEASE% |
+|  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  1.0.0 (Dec. 2014): | Initial version |
+|  Home: | http://foswiki.org/Extensions/%TOPIC% |
+|  Support: | http://foswiki.org/Support/%TOPIC% |

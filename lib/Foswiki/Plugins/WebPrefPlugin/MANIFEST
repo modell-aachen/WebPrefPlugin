@@ -1,0 +1,4 @@
+!noci
+data/System/WebPrefPlugin.txt 0644 Documentation page
+lib/Foswiki/Plugins/WebPrefPlugin.pm 0444 Perl module
+lib/Foswiki/Plugins/WebPrefPlugin/Config.spec 0444 Configuration
