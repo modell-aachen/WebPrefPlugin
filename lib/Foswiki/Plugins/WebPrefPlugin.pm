@@ -37,6 +37,15 @@ sub _WEBPREF {
 
     $web = $attributes->{web} if $attributes->{web};
 
+    if($attributes->{l}) {
+        for(my $level = 0; $level < $attributes->{l}; $level++) {
+            unless ($web =~ s#/[^/]*$##) {
+                $web = 'dummy';
+                last;
+            }
+        }
+    }
+
     my $val = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT}, $web);
     return $val if defined $val;
     return Foswiki::Func::decodeFormatTokens($attributes->{alt} || '');
