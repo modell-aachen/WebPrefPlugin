@@ -51,6 +51,32 @@ sub _WEBPREF {
     return Foswiki::Func::decodeFormatTokens($attributes->{alt} || '');
 }
 
+sub maintenanceHandler {
+    Foswiki::Plugins::MaintenancePlugin::registerCheck("WebPrefPlugin:pluginorder", {
+        name => "WebPrefPlugin in PluginsOrder",
+        description => "WebPrefPlugin should be in {PluginsOrder} before KVPPlugin.",
+        check => sub {
+            return { result => 0 } unless $Foswiki::cfg{Plugins}{KVPPlugin}{Enabled};
+
+            unless($Foswiki::cfg{PluginsOrder} =~ m#\bWebPrefPlugin\b.*\bKVPPlugin\b#) {
+                my $suggestion = $Foswiki::cfg{PluginsOrder};
+                $suggestion =~ s#,\s*WebPrefPlugin\b\s*##g;
+                $suggestion =~ s#^\s*WebPrefPlugin\s*,##;
+                unless($suggestion =~ s#\bKVPPlugin\b#WebPrefPlugin,KVPPlugin#) {
+                    $suggestion .= ",WebPrefPlugin";
+                }
+                return {
+                    result => 1,
+                    priority => $Foswiki::Plugins::MaintenancePlugin::WARN,
+                    solution => "Add WebPrefPlugin to {PluginsOrder} before KVPPlugin in configure:<br /> =\$Foswiki::cfg{PluginsOrder}= = =$suggestion="
+                }
+            } else {
+                return { result => 0 };
+            }
+        }
+    });
+}
+
 1;
 
 __END__
