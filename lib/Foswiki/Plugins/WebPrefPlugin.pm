@@ -27,7 +27,8 @@ sub initPlugin {
 
     Foswiki::Func::registerTagHandler(
         'WEBPREF', \&_WEBPREF );
-
+    Foswiki::Func::registerTagHandler(
+        'WEBMATCHPREF', \&_WEBMATCHPREF );
     # Plugin correctly initialized
     return 1;
 }
@@ -49,6 +50,46 @@ sub _WEBPREF {
     my $val = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT}, $web);
     return $val if defined $val;
     return Foswiki::Func::decodeFormatTokens($attributes->{alt} || '');
+}
+
+sub _WEBMATCHPREF {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    my $subweb = $attributes->{web} || '';
+    my $exclude = $attributes->{exclude} || '(Trash|Tasks|Custom|Sandbox|System)';
+    my $include = $attributes->{include} if $attributes->{include};
+    my $expand = $attributes->{expand} || 1;
+    my $separator = $attributes->{separator} || ',';
+
+    if($attributes->{l}) {
+        for(my $level = 0; $level < $attributes->{l}; $level++) {
+            unless ($web =~ s#/[^/]*$##) {
+                $web = 'dummy';
+                last;
+            }
+        }
+    }
+
+    my @webs;
+    my @owebs;
+    @webs = Foswiki::Func::getListOfWebs("user",$subweb);
+    @webs = grep {!/$exclude/} @webs if $exclude;
+    @webs = grep {/$include/} @webs if $include;
+    my $test = $attributes->{_DEFAULT};
+    Foswiki::Func::writeWarning("$test");
+    foreach my $web (@webs) {
+        Foswiki::Func::pushTopicContext($web,'WebPreferences');
+        my $webPref = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT});
+        Foswiki::Func::writeWarning("Web: $web Pref: $webPref");
+        if($expand) {
+            $webPref = Foswiki::Func::expandCommonVariables($webPref);
+        }
+        Foswiki::Func::popTopicContext();
+        if ( !$attributes->{value} || $webPref =~ m/$attributes->{value}/ ) {
+            push @owebs, $web;
+        }
+    }
+    return join($separator, @owebs);
 }
 
 sub maintenanceHandler {
