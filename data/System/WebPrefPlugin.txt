@@ -14,7 +14,7 @@ Read preferences set in the web's WebPreferences topic without allowing the user
 Unfortunately this also skips SitePreferences.
 
 =WEBMATCHPREF=
-Returns a list of Webs where the Preferenc is active.
+Returns a list of Webs where the preference is active.
 
 ---++ Usage
 ---+++WEBPREF
@@ -39,13 +39,13 @@ If there is no such web, the fallback will be returned.
 Parameters
 
 | Name | Value | Default | Description |
-| DEFAULT | PrefName | | Mandatory parameter which is the name of a Preference |
-| web | WebName | | Paramter wich limit the search of the subwebs of the given web |
-| value | Regex | | The given parameter must match to the value of the preferenc to return the web |
-| include | WebName | | Paramter wich limit the search to the included webs |
+| DEFAULT | PrefName | | Mandatory parameter which is the name of a preference |
+| web | WebName | | Paramter wich limits the search to the subwebs of the given web |
+| value | Regex | | The given parameter must match to the value of the preference to return the web |
+| include | WebName | | Paramter wich limits the search to the included webs |
 | exclude | WebName | <verbatim>(Trash|Tasks|Custom|Sandbox|System)</verbatim> | Paramter, to skip webs |
-| expand | 0/1 | 1 | Paramter to expand the value of a Preferences, before matching the value parameter |
-| separator | String | "," | Paramter to difine a separator string |
+| expand | 0/1 | 1 | Paramter to expand the value of a preference, before matching the value parameter |
+| separator | String | "," | Paramter to define a separator string |
 
 For example if you want to get all webs where the DEFAULT_SOURCES is set to 'ProcessesContentContrib' use
 <verbatim>%WEBMATCHPREF{"DEFAULT_SOURCES" value="ProcessesContentContrib"}%</verbatim>
