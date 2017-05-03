@@ -75,12 +75,9 @@ sub _WEBMATCHPREF {
     @webs = Foswiki::Func::getListOfWebs("user",$subweb);
     @webs = grep {!/$exclude/} @webs if $exclude;
     @webs = grep {/$include/} @webs if $include;
-    my $test = $attributes->{_DEFAULT};
-    Foswiki::Func::writeWarning("$test");
     foreach my $web (@webs) {
         Foswiki::Func::pushTopicContext($web,'WebPreferences');
         my $webPref = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT});
-        Foswiki::Func::writeWarning("Web: $web Pref: $webPref");
         if($expand) {
             $webPref = Foswiki::Func::expandCommonVariables($webPref);
         }
