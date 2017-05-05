@@ -9,10 +9,15 @@ One line description, required for extensions repository catalog.
 
 %TOC%
 
+=WEBRPEF=
 Read preferences set in the web's WebPreferences topic without allowing the user to overwrite it with settings on his personal page.
 Unfortunately this also skips SitePreferences.
 
+=WEBMATCHPREF=
+Returns a list of Webs where the preference is active.
+
 ---++ Usage
+---+++WEBPREF
 
 =%<nop>WEBPREF{"MyPrefName" alt="some value" web="MyWeb"}%=
 
@@ -21,12 +26,29 @@ Where the default parameter (mandatory, here =MyPrefName=) is the name of the pr
 For example if you want to read the web's color with a fallback to the "usual" way to read preferences use
 <verbatim>%WEBPREF{"WebColor" alt="$percentWEBBGCOLOR$percent"}%</verbatim>
 
----+++ Level
+---++++ Level
 
 The =l= parameter specifies the level. =0= (or none set) means _get the preference from the current web_. If you set it to =1= the preference will be taken from the parent. Set it to =2= and it will be taken from the parent's parent, etc.
 
 If there is no such web, the fallback will be returned.
 
+
+---+++WEBMATCHPREF
+=%<nop>WEBPREF{"MyPrefName" value="some matching value" web="MyWeb"}%=
+
+Parameters
+
+| Name | Value | Default | Description |
+| DEFAULT | PrefName | | Mandatory parameter which is the name of a preference |
+| web | WebName | | Paramter wich limits the search to the subwebs of the given web |
+| value | Regex | | The given parameter must match to the value of the preference to return the web |
+| include | WebName | | Paramter wich limits the search to the included webs |
+| exclude | WebName | <verbatim>(Trash|Tasks|Custom|Sandbox|System)</verbatim> | Paramter, to skip webs |
+| expand | 0/1 | 1 | Paramter to expand the value of a preference, before matching the value parameter |
+| separator | String | "," | Paramter to define a separator string |
+
+For example if you want to get all webs where the DEFAULT_SOURCES is set to 'ProcessesContentContrib' use
+<verbatim>%WEBMATCHPREF{"DEFAULT_SOURCES" value="ProcessesContentContrib"}%</verbatim>
 ---++ Installation
 %$INSTALL_INSTRUCTIONS%
 
