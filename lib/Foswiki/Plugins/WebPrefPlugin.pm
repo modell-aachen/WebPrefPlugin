@@ -49,6 +49,18 @@ sub _WEBPREF {
 
     my $val = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT}, $web);
     return $val if defined $val;
+
+    if($attributes->{inherit}) {
+        while($web =~ m#(.*)/#) {
+            $web = $1;
+
+            $val = Foswiki::Func::getPreferencesValue($attributes->{_DEFAULT}, $web);
+            return $val if defined $val;
+        }
+        $val = Foswiki::Plugins::DefaultPreferencesPlugin::getSitePreferencesValue($attributes->{_DEFAULT});
+        return $val if defined $val;
+    }
+
     return Foswiki::Func::decodeFormatTokens($attributes->{alt} || '');
 }
 
@@ -112,6 +124,18 @@ sub maintenanceHandler {
                 return { result => 0 };
             }
         }
+    });
+    Foswiki::Plugins::MaintenancePlugin::registerCheck("WebPrefPlugin:defaultPreferencesCurrent", {
+        name => "DefaultPreferencesPlugin is up-to-date",
+        description => "DefaultPreferencesPlugin must be up-to-date to support reading of SitePreferences.",
+        check => sub {
+            return { result => 0 } if Foswiki::Plugins::DefaultPreferencesPlugin->can('getSitePreferencesValue');
+            return {
+                result => 1,
+                priority => $Foswiki::Plugins::MaintenancePlugin::ERROR,
+                solution => 'Please update DefaultPreferencesPlugin',
+            };
+        },
     });
 }
 
